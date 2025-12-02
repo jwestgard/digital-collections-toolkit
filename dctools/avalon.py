@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import csv
 import os
 
@@ -7,9 +5,9 @@ import os
 class Batch:
     """ Class representing a batch of items to be loaded to Avalon. """
 
-    def __init__(self, objects=None, batchtitle=None, batchcontact=None):
-        self.title = batchtitle
-        self.contact = batchcontact
+    def __init__(self, objects=None, title=None, contact=None, headers=None):
+        self.title = title
+        self.contact = contact
         if objects:
             self.contents = [Item(*obj) for obj in objects]
 
@@ -23,7 +21,7 @@ class Batch:
             reader = csv.reader(handle.read().split('\n'))
             items = [list(zip(fields, row)) for row in reader if row]
 
-        return cls(items, batchtitle=title, batchcontact=contact)
+        return cls(items, batchtitle=title, batchcontact=contact, batchheaders=fields)
 
     def serialize(self, outputpath):
         """ Write the batch metadata into a CSV file at the specified path. """
@@ -46,12 +44,6 @@ class Item:
             lines.append(f"{key.upper()}: {'; '.join([v for v in values])}")
         return "\n".join(lines)
 
-
-class BinarySet:
-    """ Class representing a directory tree containing binaries. """
-
-    def __init__(self, filepath):
-        self.filepath = filepath
 
 
 

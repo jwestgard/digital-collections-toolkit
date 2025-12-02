@@ -1,0 +1,12 @@
+[project]
+name = "digital-collections-toolkit"
+version = "0.1.0"
+description = "A collection of tools for working with digital collections data"
+dependencies = [
+    "click>=8.1",
+]
+
+[project.scripts]
+hello = "dctools.hello:cli"
+validate = "dctools.validate:validate"
+
