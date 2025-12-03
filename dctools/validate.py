@@ -1,34 +1,37 @@
-#!/usr/bin/env python3
-
 from .binaries import FileSet
 from .archelon import Item, Page
 import click
-import pathlib
+import csv
 import sys
-
-
-def walk_tree(root):
-    root_path = pathlib.Path(root)
-    return [p for p in root_path.rglob("*")]
 
 
 @click.command()
 @click.argument('root')
 def validate(root):
-    sys.stderr.write(f'Searching directory: {root}\n')
+    #sys.stderr.write(f'Searching directory: {root}\n')
     fileset = FileSet(root)
-    for f in fileset:
-        i = Item.from_registry(f.item)
-        if f.seq is not None:
-            p = Page.from_registry(f.base)
-            p.files.add(f)
-            i.pages.add(p)
+    for file in fileset:
+        item = Item.from_registry(file.item)
+        if file.seq is not None:
+            page = Page.from_registry(file.base)
+            page.files.add(file)
+            item.pages.add(page)
         else:
-            i.files.add(f)
-        
-    for k, v in Item._registry.items():
-        print(v.summarize())
-        for p in sorted(v.pages):
-            print(f"  ({p.seq}) {p.summarize()}")
+            item.files.add(file)
 
-    #print(len(Item._registry))
+    writer = csv.writer(sys.stdout)
+    writer.writerow(["id","item_files","tif","hocr","xml"])
+
+    for item in sorted(Item._registry.values()):
+        writer.writerow([
+        	item.identifier,
+        	len(item.files)
+        	])
+        for page in sorted(item.pages):
+        	writer.writerow([
+        		page.identifier,
+        		None, # "Item files" column
+        		page.count('.tif'),
+        		page.count('.hocr'),
+        		page.count('.xml')
+        		])

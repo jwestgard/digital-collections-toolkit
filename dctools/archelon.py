@@ -27,11 +27,13 @@ class Item:
         return f"Item Object ({self.identifier})"
 
     def count(self, ext):
-        return f"{len([f for f in self.files if f.ext == ext])} {ext.strip('.')}"
+        return len([f for f in self.files if f.ext == ext])
 
     def summarize(self):
         exts = set(f.ext for f in self.files)
-        file_counts = ", ".join(sorted([self.count(ext) for ext in exts]))
+        file_counts = ", ".join(sorted(
+        	[f"{self.count(e)} {e.strip('.')}" for e in exts]
+        	))
         return f"{self.identifier}: {file_counts}"
 
 
@@ -48,7 +50,6 @@ class Page:
     def from_registry(cls, identifier):
         """ Returns the object with the supplied identifier or creates and registers a 
             new object if none exists with the supplied identifier. """
-
         if identifier not in cls._registry:
             cls._registry[identifier] = cls(identifier)
         return cls._registry[identifier]
@@ -60,11 +61,13 @@ class Page:
         return f"Page Object ({self.identifier})"
 
     def count(self, ext):
-        return f"{len([f for f in self.files if f.ext == ext])} {ext}"
+        return len([f for f in self.files if f.ext == ext])
 
     def summarize(self):
         exts = set(f.ext for f in self.files)
-        file_counts = ", ".join(sorted([self.count(ext) for ext in exts]))
+        file_counts = ", ".join(sorted(
+        	[f"{self.count(e)} {e.strip('.')}" for e in exts]
+        	))
         return f"{self.identifier}: {file_counts}"
 
 
