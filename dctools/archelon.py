@@ -8,8 +8,8 @@ class Item:
 
     def __init__(self, identifier):
         self.identifier = identifier
-        self.files = []
-        self.pages = []
+        self.files = set()
+        self.pages = set()
 
     @classmethod
     def from_registry(cls, identifier):
@@ -42,7 +42,7 @@ class Page:
     def __init__(self, identifier):
         self.identifier = identifier
         self.seq = int(identifier.split('-')[-1])
-        self.files = []
+        self.files = set()
 
     @classmethod
     def from_registry(cls, identifier):

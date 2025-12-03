@@ -21,10 +21,10 @@ def validate(root):
         i = Item.from_registry(f.item)
         if f.seq is not None:
             p = Page.from_registry(f.base)
-            p.files.append(f)
-            i.pages.append(p)
+            p.files.add(f)
+            i.pages.add(p)
         else:
-            i.files.append(f)
+            i.files.add(f)
         
     for k, v in Item._registry.items():
         print(v.summarize())
